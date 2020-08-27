@@ -1,0 +1,98 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define db double
+#define maxn 7005
+#define pb push_back
+#define endl "\n"
+#define LT "kandp"
+#define For( i , a , b ) for( int i = int(a) ; i <= int(b) ; i++ )
+#define FOr( i , a , b ) for( int i = int(a) ; i >= int(b) ; i-- )
+#define mp make_pair
+#define fi first
+#define se second
+typedef pair<int,int> pii;
+typedef vector<int> vi;
+ 
+int i , j , n , m , k;
+int add = 3000; //// 1000 + 2000
+int u , v , p , q , now;
+int dx[10] = {1 , 2 , -1 , -2 , 1 , -2 , 2 , -1 , 0};
+int dy[10] = {2 , 1 , -2 , -1 , -2, 1 , -1 , 2  , 0};
+int DX , DY , lim1j , lim2j;
+int kt[maxn][maxn];
+ 
+void nhap()
+{
+    cin >> u >> v >> p >> q >> now;
+    u += add , v += add , p += add , q += add;
+    if( now ) now = 0 , p--;
+ 
+    DX = abs( u - p ) + 30 , DY = abs( v - q ) + 30;
+    lim1j = -1002 + add , lim2j = 1002 + add;
+}
+ 
+void xuli()
+{
+    if( (abs(u - p) + abs(v - q) ) % 2 == 0 ) { cout << "NO\n"; return; }
+ 
+    queue <pii> st;
+    kt[u][v] = 1; st.push( mp(u , v) );
+ 
+    int T = 1;
+ 
+    For( k , 0 , 8 )
+    {
+        int i = p + dx[k] , j = q + dy[k];
+        if( kt[i][j] )
+        {
+            cout << "YES\n" << T << endl;
+            return;
+        }
+    }
+ 
+    while( true )
+    {
+        T++;
+ 
+        /// Ma
+        int sz = st.size();
+        while( sz-- )
+        {
+            int x = st.front().fi , y = st.front().se;   st.pop();
+ 
+            For( k , 0 , 7 )
+            {
+                int i = x + dx[k] , j = y + dy[k];
+                if( abs( i - p ) > DX || abs( j - q ) > DY ) continue;
+                if( j < lim1j || j > lim2j ) continue;
+                if( kt[i][j] ) continue;
+                st.push( mp( i , j ) );
+                kt[i][j] = T;
+            }
+        }
+ 
+ 
+        /// Chá»t
+        p--;
+        For( k , 0 , 8 )
+        {
+            int i = p + dx[k] , j = q + dy[k];
+            if( kt[i][j] )
+            {
+                cout << "YES\n" << T << endl;
+                return;
+            }
+        }
+    }
+}
+ 
+int main()
+{
+    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+//    freopen(LT".inp" , "r" , stdin);
+//    freopen(LT".out" , "w" , stdout);
+    nhap();
+    xuli();
+}
+ 
